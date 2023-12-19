@@ -35,7 +35,6 @@ const section1 = document.querySelector("#section--1");
 
 btnScrolloTo.addEventListener("click", function (e) {
   const s1Coords = section1.getBoundingClientRect();
-  console.log(s1Coords);
 
   // Getting the current scroll position distance between the current position viewport and the top of the page (relative to the document)
   // console.log("Current Scroll (X/Y)", window.scrollX, window.scrollY);
