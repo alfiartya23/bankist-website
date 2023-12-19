@@ -1,0 +1,11 @@
+{
+  "name": "bankist-website",
+  "version": "1.0.0",
+  "description": "A project lecture of Jonas Javascript Udemy Course",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alfi",
+  "license": "ISC"
+}
