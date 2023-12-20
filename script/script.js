@@ -30,29 +30,28 @@ document.addEventListener("keydown", function (e) {
 });
 
 // Project Code
-const btnScrolloTo = document.querySelector(".btn--scroll-to");
+const btnScrollTo = document.querySelector(".btn--scroll-to");
 const section1 = document.querySelector("#section--1");
 
-btnScrolloTo.addEventListener("click", function (e) {
-  const s1Coords = section1.getBoundingClientRect();
+// First get the coordinate that we want to go (Section 1 location (X/Y))
+btnScrollTo.addEventListener("click", function (event) {
+  // Getting the coordinate detail
+  const section1Coords = section1.getBoundingClientRect();
 
-  // Getting the current scroll position distance between the current position viewport and the top of the page (relative to the document)
-  // console.log("Current Scroll (X/Y)", window.scrollX, window.scrollY);
+  // console.log(event.target.getBoundingClientRect());
+  // console.log(`Current value of X/Y: ${window.scrollX}, ${window.scrollY}`);
 
-  // Height and Weight of the viewport
-  // This affect if we change the height/width of the viewport when we open the inspect element
-  // console.log(`Height/width of the viewport ${document.documentElement.clientHeight}, ${document.documentElement.clientWidth}.`);
+  // Read the height and width of viewport
+  console.log(`Height/width viewport is ${document.documentElement.clientHeight}, ${document.documentElement.clientWidth}`);
 
   // Scrolling
-  // Distance between the section to the top of the page
-  // Old Approach
+  // Here we find the coordinate of Section 1
+  // Curent position + current scroll
   window.scrollTo({
-    // Current position + current scroll
-    left: s1Coords.left + window.scrollX,
-    top: s1Coords.top + window.scrollY,
+    top: section1Coords.top + window.scrollY,
+    left: section1Coords.left + window.scrollX,
     behavior: "smooth",
   });
 
-  // New Approach
-  // section1.scrollIntoView({ behavior: "smooth" });
+  console.log(`Top: ${section1Coords.top + window.scrollY} Left: ${section1Coords.left + window.scrollX}`);
 });
