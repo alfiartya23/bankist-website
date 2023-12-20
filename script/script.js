@@ -8,6 +8,9 @@ const overlay = document.querySelector(".overlay");
 const btnCloseModal = document.querySelector(".btn--close-modal");
 const btnsOpenModal = document.querySelectorAll(".btn--show-modal");
 
+const btnScrollTo = document.querySelector(".btn--scroll-to");
+const section1 = document.querySelector("#section--1");
+
 const openModal = function () {
   modal.classList.remove("hidden");
   overlay.classList.remove("hidden");
@@ -29,9 +32,8 @@ document.addEventListener("keydown", function (e) {
   }
 });
 
-// Project Code
-const btnScrollTo = document.querySelector(".btn--scroll-to");
-const section1 = document.querySelector("#section--1");
+// ///////////////////////////////////////////////
+// Header CTA
 
 // First get the coordinate that we want to go (Section 1 location (X/Y))
 btnScrollTo.addEventListener("click", function (event) {
@@ -54,4 +56,23 @@ btnScrollTo.addEventListener("click", function (event) {
   });
 
   console.log(`Top: ${section1Coords.top + window.scrollY} Left: ${section1Coords.left + window.scrollX}`);
+});
+
+// ///////////////////////////////////////////////
+// Page Navigation
+// Using Event Delegation
+// 1. Add event listener to common parent element
+// 2. Determine what element originated the event
+
+document.querySelector(".nav__links").addEventListener("click", function (e) {
+  e.preventDefault();
+
+  // Matching Strategy
+  if (e.target.classList.contains("nav__link")) {
+    //     // Selecting the navigation based on its id href
+    const idSection = e.target.getAttribute("href");
+
+    //     // Scrolling to their section
+    document.querySelector(idSection).scrollIntoView({ behavior: "smooth" });
+  }
 });
