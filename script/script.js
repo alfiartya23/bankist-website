@@ -76,3 +76,36 @@ document.querySelector(".nav__links").addEventListener("click", function (e) {
     document.querySelector(idSection).scrollIntoView({ behavior: "smooth" });
   }
 });
+
+// ///////////////////////////////////////////////
+// Tabbed Component
+const tabs = document.querySelectorAll(".operations__tab");
+const tabsContainer = document.querySelector(".operations__tab-container");
+const tabsContent = document.querySelectorAll(".operations__content");
+
+// Attach the event handler to the tabs
+// We don't have to add the event listener to the all tabs element (imagine if we got 100 tabs?)
+// Instead we could use the, event delegations approach
+// BEST PRACTICE - attach the event handler on the parent element
+tabsContainer.addEventListener("click", function (event) {
+  // Using the matching strategy
+  // Find the closest parent element that has class name
+  const clicked = event.target.closest(".operations__tab");
+
+  if (!clicked) return;
+
+  // 1.  Moving down other button and remove content appear
+  tabs.forEach((tab) => {
+    tab.classList.remove("operations__tab--active");
+  });
+  tabsContent.forEach((c) => {
+    c.classList.remove("operations__content--active");
+  });
+
+  // 2.  Raising the active tabs
+  clicked.classList.add("operations__tab--active");
+
+  // 3. Activate content area
+  const selectedContent = document.querySelector(`.operations__content--${clicked.dataset.tab}`);
+  selectedContent.classList.add("operations__content--active");
+});

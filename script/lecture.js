@@ -88,21 +88,27 @@
 // 1. Going Downwards: Selecting "Child"
 const h1 = document.querySelector("h1");
 // This will return a NodeList that has the highlight class on the element itself
-console.log(h1.querySelectorAll(".highlight"));
-// Any child inside of this element will showed
-console.log(h1.childNodes);
+// console.log(h1.querySelectorAll(".highlight"));
+// Every single child inside of this element will be showed
+// console.log(h1.childNodes);
 
 // This will return a HTML Collection (Life Collection) only the element tag inside of it
-console.log(h1.children);
+// console.log(h1.children);
 
+// ------------------------------------------------
 // 2. Going Upwards: Selecting "Parents"
 // This will return the closest parent node - and this is actually returns the same result
 // console.log(h1.parentNode);
-console.log(h1.parentElement);
+// console.log(h1.parentElement);
 
-// This will select the closest header/parent element that has this .header class so then we can appy those style to that element
-h1.closest(".header").style.background = `#ddce78`;
+// This will select the closest header/parent element that has this .header class so then we can apply those style to that element
+// console.log(h1.closest(".header"));
+// h1.closest(".header").style.backgroundColor = "aqua";
 
+// This will select the element itself
+// h1.closest("h1").style.backgroundColor = "tomato";
+
+// ------------------------------------------------
 // 3. Going Sideways: Selecting direct "Siblings"
 // Only the previous and next element sibling
 // This will return null because there's no sibling before
@@ -111,6 +117,7 @@ console.log(h1.nextElementSibling);
 
 // If we need all of those element sibling
 // Moving up to the parent element and looking up from there
+
 // Returns A HTML Collection
 console.log(h1.parentElement.children);
 [...h1.parentElement.children].forEach((element) => {
