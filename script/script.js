@@ -11,6 +11,10 @@ const btnsOpenModal = document.querySelectorAll(".btn--show-modal");
 const btnScrollTo = document.querySelector(".btn--scroll-to");
 const section1 = document.querySelector("#section--1");
 
+const tabs = document.querySelectorAll(".operations__tab");
+const tabsContainer = document.querySelector(".operations__tab-container");
+const tabsContent = document.querySelectorAll(".operations__content");
+
 const openModal = function () {
   modal.classList.remove("hidden");
   overlay.classList.remove("hidden");
@@ -79,9 +83,6 @@ document.querySelector(".nav__links").addEventListener("click", function (e) {
 
 // ///////////////////////////////////////////////
 // Tabbed Component
-const tabs = document.querySelectorAll(".operations__tab");
-const tabsContainer = document.querySelector(".operations__tab-container");
-const tabsContent = document.querySelectorAll(".operations__content");
 
 // Attach the event handler to the tabs
 // We don't have to add the event listener to the all tabs element (imagine if we got 100 tabs?)
@@ -109,3 +110,68 @@ tabsContainer.addEventListener("click", function (event) {
   const selectedContent = document.querySelector(`.operations__content--${clicked.dataset.tab}`);
   selectedContent.classList.add("operations__content--active");
 });
+
+// ///////////////////////////////////////////////
+// Menu Fade Out Animations
+// Using Event Delegations Approach
+const nav = document.querySelector(".nav");
+
+// Handling the opacity function
+function handleHover(event, opacity) {
+  if (event.target.classList.contains("nav__link")) {
+    const hoverLink = event.target;
+    const siblings = hoverLink.closest(".nav").querySelectorAll(".nav__link");
+    const logo = hoverLink.closest(".nav").querySelector("img");
+
+    siblings.forEach((element) => {
+      if (element !== hoverLink) {
+        element.style.opacity = opacity;
+      }
+    });
+    logo.style.opacity = opacity;
+  }
+}
+
+// Mouse enter
+nav.addEventListener("mouseover", function (event) {
+  handleHover(event, 0.5);
+});
+
+// Mouse leave
+nav.addEventListener("mouseout", function (event) {
+  handleHover(event, 1);
+});
+
+// ///////////////////////////////////////////////
+// Sticky Navigation
+// Selecting the Header element
+const header = document.querySelector(".header");
+const navHeight = nav.getBoundingClientRect().height;
+
+// --- BEST PRACTICE ---
+const stickyNav = function (entries) {
+  // This entries parameter in here is actually an array of the threshold element, that's why we use forEach
+  const [entry] = entries;
+  console.log(entry);
+
+  // The degree of intersection between the target element and its root is the intersectionRatio
+  console.log(entry.intersectionRatio);
+
+  // Checking if the intersecting value is true or false
+  if (!entry.isIntersecting) {
+    // Add the sticky classes to the nav
+    nav.classList.add("sticky");
+  } else {
+    nav.classList.remove("sticky");
+  }
+};
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  // When 0% of the header here is visible then do something in the callback
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
+});
+
+// Targeting section-1 element to be observed
+headerObserver.observe(header);
