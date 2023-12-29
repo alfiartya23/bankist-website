@@ -40,7 +40,7 @@ document.addEventListener("keydown", function (e) {
 // Header CTA
 
 // First get the coordinate that we want to go (Section 1 location (X/Y))
-btnScrollTo.addEventListener("click", function (event) {
+btnScrollTo.addEventListener("click", function () {
   // Getting the coordinate detail
   const section1Coords = section1.getBoundingClientRect();
 
@@ -68,15 +68,15 @@ btnScrollTo.addEventListener("click", function (event) {
 // 1. Add event listener to common parent element
 // 2. Determine what element originated the event
 
-document.querySelector(".nav__links").addEventListener("click", function (e) {
-  e.preventDefault();
+document.querySelector(".nav__links").addEventListener("click", function (event) {
+  event.preventDefault();
 
   // Matching Strategy
-  if (e.target.classList.contains("nav__link")) {
-    //     // Selecting the navigation based on its id href
-    const idSection = e.target.getAttribute("href");
+  if (event.target.classList.contains("nav__link")) {
+    // Selecting the navigation based on its id href
+    const idSection = event.target.getAttribute("href");
 
-    //     // Scrolling to their section
+    // Scrolling to their section
     document.querySelector(idSection).scrollIntoView({ behavior: "smooth" });
   }
 });
@@ -150,14 +150,14 @@ const navHeight = nav.getBoundingClientRect().height;
 
 // --- BEST PRACTICE ---
 const stickyNav = function (entries) {
-  // This entries parameter in here is actually an array of the threshold element, that's why we use forEach
+  // This entries parameter in here is actually an array of the threshold element, that's why we can use forEach
+  // We can do the array destructure on the entries array too
   const [entry] = entries;
-  console.log(entry);
 
   // The degree of intersection between the target element and its root is the intersectionRatio
-  console.log(entry.intersectionRatio);
+  // console.log(entry.intersectionRatio);
 
-  // Checking if the intersecting value is true or false
+  // Checking if the intersecting value is true then add the sticky class to the NAV
   if (!entry.isIntersecting) {
     // Add the sticky classes to the nav
     nav.classList.add("sticky");
@@ -168,10 +168,77 @@ const stickyNav = function (entries) {
 
 const headerObserver = new IntersectionObserver(stickyNav, {
   root: null,
-  // When 0% of the header here is visible then do something in the callback
+  // When the header here is not visible (0% of the threshold) and the height -90px of nav height then do something in the callback function
   threshold: 0,
+  // The navigation should appear exactly -90px before the threshold was actually reach
   rootMargin: `-${navHeight}px`,
 });
 
 // Targeting section-1 element to be observed
 headerObserver.observe(header);
+
+// ///////////////////////////////////////////////
+// Revealing Element on Scroll
+const allSections = document.querySelectorAll(".section");
+
+const sectionObserver = new IntersectionObserver(
+  function (entries, observer) {
+    const [entry] = entries;
+
+    // To prevent the section-1 showing first
+    if (!entry.isIntersecting) return;
+
+    entry.target.classList.remove("section--hidden");
+
+    // Stopping the observer to observe the target element
+    observer.unobserve(entry.target);
+  },
+  {
+    root: null,
+    threshold: 0.15,
+  }
+);
+
+allSections.forEach((section) => {
+  sectionObserver.observe(section);
+  section.classList.add("section--hidden");
+});
+
+// ///////////////////////////////////////////////
+// Lazy Loading Images Concept
+// In this section we just have to focus on the image that has the lazy-images class
+// Selecting those image target that has the data-src attr
+const imgTarget = document.querySelectorAll("img[data-src]");
+
+// Create observe variable for every images
+const imgObserver = new IntersectionObserver(
+  function (entries, observer) {
+    const [entry] = entries;
+
+    console.log(entry);
+    // This return is used only to end the execution of a function. So, if there is no intersection, do nothing.
+    if (!entry.isIntersecting) return;
+
+    // Replacing the img src with the dataset src
+    entry.target.src = entry.target.dataset.src;
+
+    // Removing the lazy-img class for each image
+    entry.target.addEventListener("load", function () {
+      entry.target.classList.remove("lazy-img");
+    });
+
+    // Stop browser to observe again when scrolling to the top
+    observer.unobserve(entry.target);
+  },
+  {
+    root: null,
+    threshold: 0,
+    // The image should loaded exactly -200px before the threshold was actually reach
+    rootMargin: "-200px",
+  }
+);
+
+// Targeting element to be observed
+imgTarget.forEach((img) => {
+  imgObserver.observe(img);
+});
