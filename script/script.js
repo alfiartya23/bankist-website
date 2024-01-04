@@ -201,7 +201,7 @@ const sectionObserver = new IntersectionObserver(
 
 allSections.forEach((section) => {
   sectionObserver.observe(section);
-  section.classList.add("section--hidden");
+  // section.classList.add("section--hidden");
 });
 
 // ///////////////////////////////////////////////
@@ -215,7 +215,6 @@ const imgObserver = new IntersectionObserver(
   function (entries, observer) {
     const [entry] = entries;
 
-    console.log(entry);
     // This return is used only to end the execution of a function. So, if there is no intersection, do nothing.
     if (!entry.isIntersecting) return;
 
@@ -241,4 +240,99 @@ const imgObserver = new IntersectionObserver(
 // Targeting element to be observed
 imgTarget.forEach((img) => {
   imgObserver.observe(img);
+});
+
+// ///////////////////////////////////////////////
+// Slider Component - PART1
+const slides = document.querySelectorAll(".slide");
+const slider = document.querySelector(".slider");
+const btnLeft = document.querySelector(".slider__btn--left");
+const btnRight = document.querySelector(".slider__btn--right");
+const dotsContainer = document.querySelector(".dots");
+let currentSlide = 0;
+const maxSlide = slides.length;
+
+// We need to reveal all those images, so we can see the image
+// slider.style.transform = "scale(0.4)";
+// slider.style.overflow = "visible";
+// slides.forEach((slide, index) => {
+//   // 0% 100% 200% 300%
+//   slide.style.transform = `translateX(${100 * index}%)`;
+// });
+
+// ------ Function ------
+// Creating the dots with innerAdjacentHTML before end
+function createDots() {
+  slides.forEach((_, index) => {
+    // Creating the dot with button tag
+    dotsContainer.insertAdjacentHTML("beforeend", `<button class="dots__dot" data-slide="${index}"></button>`);
+  });
+}
+
+function activateDots(currentSlide) {
+  // Lookup to the parent first. Then forEach button, add the logic
+  document.querySelectorAll(".dots__dot").forEach((dot) => {
+    // Removing all active tabs
+    dot.classList.remove("dots__dot--active");
+
+    // Selecting based on data-slide attr
+    document.querySelector(`.dots__dot[data-slide="${currentSlide}"]`).classList.add("dots__dot--active");
+  });
+}
+
+// Refactoring the function
+function goToSlide(slide) {
+  slides.forEach((s, i) => {
+    s.style.transform = `translateX(${100 * (i - slide)}%)`;
+  });
+}
+
+function nextSlide() {
+  // When user click this button change the order into
+  // -100% 0% 100% 100%
+
+  // Facing the issue of maximum next slide
+  currentSlide === maxSlide - 1 ? (currentSlide = 0) : currentSlide++;
+
+  goToSlide(currentSlide);
+  activateDots(currentSlide);
+}
+
+function previousSlide() {
+  // Facing the issue of maximum next slide
+  currentSlide === 0 ? (currentSlide = maxSlide - 1) : currentSlide--;
+
+  goToSlide(currentSlide);
+  activateDots(currentSlide);
+}
+
+// This will activate all dots
+function initializeSliderDots() {
+  createDots();
+  activateDots(0);
+  goToSlide(0);
+}
+initializeSliderDots();
+
+// Handling Button
+btnRight.addEventListener("click", nextSlide);
+btnLeft.addEventListener("click", previousSlide);
+
+// Handling with Arrow Keys
+document.addEventListener("keydown", function (event) {
+  event.key === "ArrowRight" && nextSlide();
+  event.key === "ArrowLeft" && previousSlide();
+});
+
+// Selecting the dots based on the Event Delegation approach
+dotsContainer.addEventListener("click", function (event) {
+  if (event.target.classList.contains("dots__dot")) {
+    // Taking the number of the image dataset
+    const { slide } = event.target.dataset;
+    // Slide to the image selected
+    goToSlide(slide);
+
+    // Activate the white dots
+    activateDots(slide);
+  }
 });
