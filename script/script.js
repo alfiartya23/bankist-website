@@ -2,18 +2,28 @@
 
 ///////////////////////////////////////
 // Modal window
-
 const modal = document.querySelector(".modal");
 const overlay = document.querySelector(".overlay");
 const btnCloseModal = document.querySelector(".btn--close-modal");
 const btnsOpenModal = document.querySelectorAll(".btn--show-modal");
 
+// Hero CTA Button
 const btnScrollTo = document.querySelector(".btn--scroll-to");
 const section1 = document.querySelector("#section--1");
 
+// Tabs button
 const tabs = document.querySelectorAll(".operations__tab");
 const tabsContainer = document.querySelector(".operations__tab-container");
 const tabsContent = document.querySelectorAll(".operations__content");
+
+// Slider Component
+const slides = document.querySelectorAll(".slide");
+const slider = document.querySelector(".slider");
+const btnLeft = document.querySelector(".slider__btn--left");
+const btnRight = document.querySelector(".slider__btn--right");
+const dotsContainer = document.querySelector(".dots");
+const maxSlide = slides.length;
+let currentSlide = 0;
 
 const openModal = function () {
   modal.classList.remove("hidden");
@@ -44,11 +54,8 @@ btnScrollTo.addEventListener("click", function () {
   // Getting the coordinate detail
   const section1Coords = section1.getBoundingClientRect();
 
-  // console.log(event.target.getBoundingClientRect());
-  // console.log(`Current value of X/Y: ${window.scrollX}, ${window.scrollY}`);
-
   // Read the height and width of viewport
-  console.log(`Height/width viewport is ${document.documentElement.clientHeight}, ${document.documentElement.clientWidth}`);
+  // console.log(`Height/width viewport is ${document.documentElement.clientHeight}, ${document.documentElement.clientWidth}`);
 
   // Scrolling
   // Here we find the coordinate of Section 1
@@ -59,7 +66,7 @@ btnScrollTo.addEventListener("click", function () {
     behavior: "smooth",
   });
 
-  console.log(`Top: ${section1Coords.top + window.scrollY} Left: ${section1Coords.left + window.scrollX}`);
+  // console.log(`Top: ${section1Coords.top + window.scrollY} Left: ${section1Coords.left + window.scrollX}`);
 });
 
 // ///////////////////////////////////////////////
@@ -243,15 +250,7 @@ imgTarget.forEach((img) => {
 });
 
 // ///////////////////////////////////////////////
-// Slider Component - PART1
-const slides = document.querySelectorAll(".slide");
-const slider = document.querySelector(".slider");
-const btnLeft = document.querySelector(".slider__btn--left");
-const btnRight = document.querySelector(".slider__btn--right");
-const dotsContainer = document.querySelector(".dots");
-let currentSlide = 0;
-const maxSlide = slides.length;
-
+// Slider Component
 // We need to reveal all those images, so we can see the image
 // slider.style.transform = "scale(0.4)";
 // slider.style.overflow = "visible";
